@@ -40,6 +40,37 @@ string int2string(int num) {
     return res;
 }
 
+string lineCodeToHtml(string s) {
+    string res = "";
+    for (int i = 0; i < s.size(); ++i) {
+        if (s[i] == '<') {
+            res += "&lt;";
+        } else if (s[i] == '>') {
+            res += "&gt;";
+        } else {
+            res += s[i];
+        }
+    }
+    return res;
+}
+
+string cppToHtml(string file) {
+    ifstream IN(file);
+    string res = "<!DOCTYPE html><html><head><script src=\"index.js\"></script><title>NNP's Repo</title></head>";
+    res = res + "<body>";
+    res = res + "<pre>";
+    char buffer[MAX_N];
+    while (IN.getline(buffer, MAX_N)) {
+        res += lineCodeToHtml(buffer);
+        res += "<br>";
+    }
+    res = res + "</pre>";
+    res = res + "</body>";
+    res = res + "</html>";
+    IN.close();
+    return res;
+}
+
 void NNP_new(string title) {
     string cmd = "touch " + title + ".md && touch " + source + ".cpp";
     system(cmd.c_str());
@@ -48,7 +79,11 @@ void NNP_new(string title) {
 }
 
 void NNP_submit(string title) {
+    string html = cppToHtml("./" + source + ".cpp");
     string cmd = "mv " + source + ".cpp ./SourceCode/" + source + ".html";
+    ofstream OUT("./" + source + ".cpp");
+    OUT << html;
+    OUT.close();
     system(cmd.c_str());
     cmd = "python add_record.py " + title + " " + source;
     system(cmd.c_str());

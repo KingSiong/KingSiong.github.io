@@ -15,7 +15,6 @@ with open('./' + title + '.md') as file:
     record = {}
     for line in file:
         str_lst = line.split(":")
-        print(str_lst)
         record[str_lst[0]] = str_lst[1]
         pass
     with open('./record.json') as file_read:
