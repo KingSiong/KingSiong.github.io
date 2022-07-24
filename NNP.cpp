@@ -11,6 +11,15 @@ using namespace std;
 const int MAX_N = 1007;
 string title, source;
 
+bool NNP_run_cmd(string cmd) {
+    int status = system(cmd.c_str());
+    return WIFEXITED(status) && (!WEXITSTATUS(status));
+}
+
+void NNP_error(string err_info) {
+    cerr << "NNP ERROR: " << err_info << "\n";
+}
+
 string NNP_template() {
     string res = "";
     res = res + "title: " + title + "\n";
@@ -56,6 +65,10 @@ string lineCodeToHtml(string s) {
 
 string cppToHtml(string file) {
     ifstream IN(file);
+    if (IN.fail()) {
+        NNP_error("failed to open " + file);
+        return "";
+    }
     string res = 
 "<!DOCTYPE html>\n\
 <html>\n\
@@ -98,27 +111,49 @@ string cppToHtml(string file) {
     return res;
 }
 
-void NNP_new(string title) {
+bool NNP_new(string title) {
     string cmd = "mkdir " + source + "/";
     cmd = cmd + " && " + "touch ./" + source + "/" + title + ".md";
     cmd = cmd + " && " + "touch ./" + source + "/source_code.cpp";
-    system(cmd.c_str());
+    if (!NNP_run_cmd(cmd)) {
+        NNP_error("failed to create folder or file.");
+        return false;
+    }
     ofstream OUT("./" + source + "/" + title + ".md");
+    if (OUT.fail()) {
+        NNP_error("failed to open ./" + source + "/" + title + ".md");
+        return false;
+    }
     OUT << NNP_template();
+    OUT.close();
+    return true;
 }
 
-void NNP_submit(string title) {
+bool NNP_submit(string title) {
     string html = cppToHtml("./" + source + "/source_code.cpp");
     string cmd = "touch ./" + source + "/index.html";
-    system(cmd.c_str());
+    if (!NNP_run_cmd(cmd)) {
+        NNP_error("failed to create index.html");
+        return false;
+    }
     ofstream OUT("./" + source + "/index.html");
+    if (OUT.fail()) {
+        NNP_error("failed to oepn ./" + source + "/index.html");
+        return false;
+    }
     OUT << html;
     OUT.close();
     cmd = "python add_record.py " + title + " " + source;
-    system(cmd.c_str());
+    if (!NNP_run_cmd(cmd)) {
+        NNP_error("failed to run add_record.py.");
+        return false;
+    }
     cmd = "mv ./" + source + "/" + " ./Code/" + source; 
-    system(cmd.c_str());
-
+    if (!NNP_run_cmd(cmd)) {
+        NNP_error("failed to move folder.");
+        return false;
+    }
+    return true;
 }
 
 int main(int argc, char *argv[]) {
@@ -133,13 +168,15 @@ int main(int argc, char *argv[]) {
         source = int2string(cnt) + "_" + title;
         if (cmd == "new" || cmd == "n") {
             if (argc > 2) {
-                NNP_new(title);
-                cout << title + "/ has been created on " + source + "/.\n";
+                if (NNP_new(title)) {
+                    cout << title + "/ has been created on " + source + "/.\n";
+                }
             }
         } else if (cmd == "submit" || cmd == "s") {
             if (argc > 2) {
-                NNP_submit(title);
-                cout << source + "/ has been submitted.\n";
+                if (NNP_submit(title)) {
+                    cout << source + "/ has been submitted.\n";
+                }
             }
         }
     }
