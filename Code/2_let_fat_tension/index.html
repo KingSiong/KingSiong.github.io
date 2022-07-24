@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../default.min.css">
+        <script src="../highlight.min.js"></script>
+        <script src="../highlightjs-line-numbers.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+            hljs.initLineNumbersOnLoad();
+        </script>
+        <style>
+            .hljs-ln-numbers {
+                text-align: center;
+                color: #ccc;
+                border-right: 1px solid #999;
+                vertical-align: top;
+                padding-right: 5px;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
+        <title>NNP's Repo</title>
+    </head>
+<body>
+<pre><code>#include &lt;bits/stdc++.h&gt;
+
+using namespace std;
+
+const int MAX_N = 1e4 + 7;
+const int MAX_K = 57;
+int n, k, d;
+vector&lt;double&gt; x[MAX_N], y[MAX_N];
+double mid[MAX_K][MAX_K];
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin &gt;&gt; n &gt;&gt; k &gt;&gt; d;
+    for (int i = 0; i &lt; n; ++i) {
+        double sum = 0;
+        for (int j = 0; j &lt; k; ++j) {
+            int tmp;
+            cin &gt;&gt; tmp;
+            sum += tmp * tmp;
+            x[i].emplace_back(tmp);
+        }
+        sum = sqrt(sum);
+        for (int j = 0; j &lt; k; ++j) x[i][j] /= sum;
+    }
+    for (int i = 0; i &lt; n; ++i) {
+        for (int j = 0; j &lt; d; ++j) {
+            int tmp;
+            cin &gt;&gt; tmp;
+            y[i].emplace_back(tmp);
+        }
+    }
+    for (int i = 0; i &lt; d; ++i) {
+        for (int j = 0; j &lt; k; ++j) {
+            mid[i][j] = 0;
+            for (int t = 0; t &lt; n; ++t) {
+                mid[i][j] += y[t][i] * x[t][j];
+            }
+        }
+    }
+    for (int i = 0; i &lt; d; ++i) {
+        for (int j = 0; j &lt; n; ++j) {
+            y[j][i] = 0;
+            for (int t = 0; t &lt; k; ++t) {
+                y[j][i] += mid[i][t] * x[j][t];
+            }
+        }
+    }
+    for (int i = 0; i &lt; n; ++i) {
+        for (int j = 0; j &lt; d; ++j) {
+            cout &lt;&lt; fixed &lt;&lt; setprecision(8) &lt;&lt; y[i][j] &lt;&lt; " ";
+        }
+        cout &lt;&lt; "\n";
+    }
+    return 0;
+}
+</pre></code>
+</body>
+</html>
