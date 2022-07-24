@@ -12,13 +12,13 @@ First, git clone this reposity. If you have this cloned, git pull origin main to
 
 Second, there are two steps to add your record to this repo by using `./NNP` (which is short of 'N is Not NP', maybe... and i am not sure) :
 
--  Run
+-  Run(if it don't work, `g++ NNP.cpp -o NNP`)
 
   ```shell
   $ ./NNP new/n you_record_name
   ```
 
-  and you will get a new folder named index_you_record_name(i did not deal with blank(lazy boy...) space so replace blank space with `_` if there are blank spaces.) under  `./` with two files. Following is an example:
+  and you will get a new folder named index_you_record_name(i did not deal with blank space(lazy boy...), so replace blank space with `_` if there are blank spaces.) under  `./` with two files. Following is an example:
 
   ![](./fig1.png)
 
