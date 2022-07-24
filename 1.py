@@ -7,11 +7,11 @@ def get_time():
     now_time = time.strftime("%Y-%m-%d %H:%M:%S",now)
     return now_time
 
-title = sys.argv[1]
-source = sys.argv[2]
+# title = sys.argv[1]
+# source = sys.argv[2]
 submit_time = get_time()
 
-with open('./' + source + "/" + title + '.md',encoding='utf-8') as file:
+with open('my.md',encoding = 'utf-8') as file:
     record = {}
     for line in file:
         str_lst = line.split(":")
