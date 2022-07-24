@@ -8,11 +8,11 @@ pass, leave this to someone else...(Lu? Zhu?)
 
 ### Add A Code Record
 
-First, git clone this reposity. If you have this cloned, git pull origin main to update it.
+First, git clone this repository. If you have this cloned, `git pull origin main` to update it.
 
-Second, there are two steps to add your record to this repo by using `./NNP` (which is short of 'N is Not NP', maybe... and i am not sure) :
+Second, there are two steps to add your record to this repo by using `./NNP` (which is short of 'N is Not NP', maybe... i am not sure) :
 
--  Run(if it didn't work, `g++ NNP.cpp -o NNP`)
+-  Run(if it didn't work, try `g++ NNP.cpp -o NNP`)
 
   ```shell
   $ ./NNP new/n you_record_name
