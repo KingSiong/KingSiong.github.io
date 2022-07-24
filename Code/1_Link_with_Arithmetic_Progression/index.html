@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../default.min.css">
+        <script src="../highlight.min.js"></script>
+        <script src="../highlightjs-line-numbers.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+            hljs.initLineNumbersOnLoad();
+        </script>
+        <style>
+            .hljs-ln-numbers {
+                text-align: center;
+                color: #ccc;
+                border-right: 1px solid #999;
+                vertical-align: top;
+                padding-right: 5px;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
+        <title>NNP's Repo</title>
+    </head>
+<body>
+<pre><code>#include &lt;bits/stdc++.h&gt;
+
+using namespace std;
+
+const int MAX_N = 1e5 + 7;
+int T, n;
+int a[MAX_N];
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin &gt;&gt; T;
+    while (T--) {
+        cin &gt;&gt; n;
+        double xbar = 1.0 * (n - 1) / 2, ybar = 0;
+        for (int i = 0; i &lt; n; ++i) cin &gt;&gt; a[i], ybar += a[i];
+        ybar /= 1.0 * n;
+        double u = 0, d = 0;
+        for (int i = 0; i &lt; n; ++i) {
+            u += 1.0 * (i - xbar) * (a[i] - ybar);
+            d += 1.0 * (i - xbar) * (i - xbar);
+        }
+        double b1 = u / d, b0 = ybar - b1 * xbar;
+        double ans = 0;
+        for (int i = 0; i &lt; n; ++i) {
+            ans += 1.0 * (a[i] - i * b1 - b0) * (a[i] - i * b1 - b0);
+        }
+        cout &lt;&lt; fixed &lt;&lt; setprecision(10) &lt;&lt; ans &lt;&lt; "\n";
+    }
+    return 0;
+}
+</pre></code>
+</body>
+</html>

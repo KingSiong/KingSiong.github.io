@@ -56,60 +56,90 @@ string lineCodeToHtml(string s) {
 
 string cppToHtml(string file) {
     ifstream IN(file);
-    string res = "<!DOCTYPE html><html><head><script src=\"index.js\"></script><title>NNP's Repo</title></head>";
-    res = res + "<body>";
-    res = res + "<pre>";
+    string res = 
+"<!DOCTYPE html>\n\
+<html>\n\
+    <head>\n\
+        <link rel=\"stylesheet\" href=\"../default.min.css\">\n\
+        <script src=\"../highlight.min.js\"></script>\n\
+        <script src=\"../highlightjs-line-numbers.min.js\"></script>\n\
+        <script>\n\
+            hljs.initHighlightingOnLoad();\n\
+            hljs.initLineNumbersOnLoad();\n\
+        </script>\n\
+        <style>\n\
+            .hljs-ln-numbers {\n\
+                text-align: center;\n\
+                color: #ccc;\n\
+                border-right: 1px solid #999;\n\
+                vertical-align: top;\n\
+                padding-right: 5px;\n\
+                -webkit-touch-callout: none;\n\
+                -webkit-user-select: none;\n\
+                -khtml-user-select: none;\n\
+                -moz-user-select: none;\n\
+                -ms-user-select: none;\n\
+                user-select: none;\n\
+            }\n\
+        </style>\n\
+        <title>NNP's Repo</title>\n\
+    </head>\n";
+    res = res + "<body>\n";
+    res = res + "<pre><code>";
     char buffer[MAX_N];
     while (IN.getline(buffer, MAX_N)) {
         res += lineCodeToHtml(buffer);
-        res += "<br>";
+        res += "\n";
     }
-    res = res + "</pre>";
-    res = res + "</body>";
-    res = res + "</html>";
+    res = res + "</pre></code>\n";
+    res = res + "</body>\n";
+    res = res + "</html>\n";
     IN.close();
     return res;
 }
 
 void NNP_new(string title) {
-    string cmd = "touch " + title + ".md && touch " + source + ".cpp";
+    string cmd = "mkdir " + source + "/";
+    cmd = cmd + " && " + "touch ./" + source + "/" + title + ".md";
+    cmd = cmd + " && " + "touch ./" + source + "/source_code.cpp";
     system(cmd.c_str());
-    ofstream OUT("./" + title + ".md");
+    ofstream OUT("./" + source + "/" + title + ".md");
     OUT << NNP_template();
 }
 
 void NNP_submit(string title) {
-    string html = cppToHtml("./" + source + ".cpp");
-    string cmd = "mv " + source + ".cpp ./SourceCode/" + source + ".html";
-    ofstream OUT("./" + source + ".cpp");
+    string html = cppToHtml("./" + source + "/source_code.cpp");
+    string cmd = "touch ./" + source + "/index.html";
+    system(cmd.c_str());
+    ofstream OUT("./" + source + "/index.html");
     OUT << html;
     OUT.close();
-    system(cmd.c_str());
     cmd = "python add_record.py " + title + " " + source;
     system(cmd.c_str());
-    cmd = "rm -f " + title + ".md";
+    cmd = "mv ./" + source + "/" + " ./Code/" + source; 
     system(cmd.c_str());
+
 }
 
 int main(int argc, char *argv[]) {
     if (argc > 1) {
         string cmd = argv[1];
         title = argv[2];
-        FILE *fp = popen("find SourceCode -type f | wc -l", "r");
+        FILE *fp = popen("find Code -type d | wc -l", "r");
         char buffer[MAX_N];
         fread(buffer, 1, sizeof(buffer), fp);
-        int cnt = string2int(buffer);
+        int cnt = string2int(buffer) - 1;
         pclose(fp);
         source = int2string(cnt) + "_" + title;
         if (cmd == "new" || cmd == "n") {
             if (argc > 2) {
                 NNP_new(title);
-                cout << title + ".md has been created.\n";
+                cout << title + "/ has been created on " + source + "/.\n";
             }
         } else if (cmd == "submit" || cmd == "s") {
             if (argc > 2) {
                 NNP_submit(title);
-                cout << title + ".md has been submitted.\n";
+                cout << source + "/ has been submitted.\n";
             }
         }
     }

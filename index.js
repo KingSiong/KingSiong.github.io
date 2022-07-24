@@ -32,7 +32,7 @@ function NNPGetContent(obj) {
     content = content + "Date: " + obj["time"] + "<br>";
     content = content + "Author: " + obj["author"] + "<br>";
     content = content + "Remark: " + obj["remark"] + "<br>";
-    content = content + "<a href = /SourceCode/" + obj["source"] + ">Code Link</a>";
+    content = content + "<a href = /Code/" + obj["source"] + ">Code Link</a>";
     content = content + "</p>";
     return content;
 }

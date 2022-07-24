@@ -11,7 +11,7 @@ title = sys.argv[1]
 source = sys.argv[2]
 submit_time = get_time()
 
-with open('./' + title + '.md') as file:
+with open('./' + source + "/" + title + '.md') as file:
     record = {}
     for line in file:
         str_lst = line.split(":")
@@ -20,7 +20,7 @@ with open('./' + title + '.md') as file:
     with open('./record.json') as file_read:
         json_data = json.load(file_read)
         record['title'] = title
-        record['source'] = source + '.html'
+        record['source'] = source
         record['time'] = submit_time
         json_data['record'].append(record)
         with open('./record.json', 'w') as file_write:
