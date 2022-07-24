@@ -36,7 +36,7 @@ Lastly, git push and refresh the web page to see the changes.
 
 ### Bug Fix or New Feature
 
-I hardly write javascript and python, so what i wrote is akwark. In this case, i wish you to fix some bugs or add more features.
+I hardly write javascript and python, so what i wrote is akward. In this case, i wish you to fix some bugs or add more features.
 
 For bug fix: 
 
