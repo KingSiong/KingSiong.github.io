@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../default.min.css">
+        <script src="../highlight.min.js"></script>
+        <script src="../highlightjs-line-numbers.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+            hljs.initLineNumbersOnLoad();
+        </script>
+        <style>
+            .hljs-ln-numbers {
+                text-align: center;
+                color: #ccc;
+                border-right: 1px solid #999;
+                vertical-align: top;
+                padding-right: 5px;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
+        <title>NNP's Repo</title>
+    </head>
+<body>
+<pre><code>#include &lt;bits/stdc++.h&gt;
+// #define debug
+
+using namespace std;
+
+enum Type {A, B};
+const int MAX_N = 1e5 + 7;
+vector&lt;int&gt; e[2][MAX_N];
+int x[MAX_N], a[MAX_N], b[MAX_N]; 
+bool cricial[MAX_N];
+int siz[2][MAX_N], node[2][MAX_N], ans[2][MAX_N];
+int n, k;
+int lca;
+
+void dfs(int u, Type type) {
+    int cnt = cricial[u] ? 1 : 0;
+    siz[type][u] = cricial[u] ? 1 : 0;
+    node[type][u] = 0;
+    for (auto v : e[type][u]) {
+        dfs(v, type);
+        siz[type][u] += siz[type][v];
+        cnt += (siz[type][v] &gt; 0);
+        if (node[type][v]) node[type][u] = node[type][v];
+    }
+    if (cnt &gt; 1 || cricial[u]) {
+        lca = u;
+    }
+    if (cricial[u]) node[type][u] = u;
+}
+
+void solve(Type type) {
+    dfs(1, type);
+    for (int i = 1; i &lt;= n; ++i) ans[type][i] = lca;
+    if (cricial[lca]) {
+        cricial[lca] = false;
+        int tmp_lca = lca;
+        dfs(1, type);
+        ans[type][tmp_lca] = lca;
+        cricial[tmp_lca] = true;
+    } else {
+        int cnt = 0;
+        vector&lt;int&gt; son;
+        for (auto v : e[type][lca]) {
+            if (siz[type][v]) {
+                ++cnt;
+                if (siz[type][v] == 1) son.emplace_back(node[type][v]);
+            }
+        }
+        if (cnt &lt; 3) {
+            for (auto v : son) {
+                cricial[v] = false;
+                dfs(1, type);
+                ans[type][v] = lca;
+                cricial[v] = true;
+            }
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin &gt;&gt; n &gt;&gt; k;
+    for (int i = 1; i &lt;= k; ++i) cin &gt;&gt; x[i], cricial[x[i]] = true;
+    for (int i = 1; i &lt;= n; ++i) cin &gt;&gt; a[i];
+    for (int i = 2; i &lt;= n; ++i) {
+        int p;
+        cin &gt;&gt; p;
+        e[A][p].emplace_back(i);
+    }
+    for (int i = 1; i &lt;= n; ++i) cin &gt;&gt; b[i];
+    for (int i = 2; i &lt;= n; ++i) {
+        int p;
+        cin &gt;&gt; p;
+        e[B][p].emplace_back(i);
+    }
+    solve(A); solve(B);
+#ifdef debug
+    cricial[3] = false;
+    dfs(1, A);
+    cout &lt;&lt; lca &lt;&lt; endl;
+#endif
+    int cnt = 0;
+    for (int i = 1; i &lt;= k; ++i) {
+    #ifdef debug
+        cout &lt;&lt; ans[A][x[i]] &lt;&lt; " " &lt;&lt; x[i] &lt;&lt; " " &lt;&lt; ans[B][x[i]] &lt;&lt; endl;
+    #endif
+        if (a[ans[A][x[i]]] &gt; b[ans[B][x[i]]]) ++cnt;
+    }
+    cout &lt;&lt; cnt &lt;&lt; "\n";
+    return 0;
+}
+</pre></code>
+</body>
+</html>
