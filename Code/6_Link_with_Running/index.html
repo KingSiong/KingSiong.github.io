@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../default.min.css">
+        <script src="../highlight.min.js"></script>
+        <script src="../highlightjs-line-numbers.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+            hljs.initLineNumbersOnLoad();
+        </script>
+        <style>
+            .hljs-ln-numbers {
+                text-align: center;
+                color: #ccc;
+                border-right: 1px solid #999;
+                vertical-align: top;
+                padding-right: 5px;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
+        <title>NNP's Repo</title>
+    </head>
+<body>
+<pre><code>#include &lt;bits/stdc++.h&gt;
+#define int long long
+
+using namespace std;
+
+struct Node {
+    int v, e, p;
+};
+
+typedef pair&lt;int, int&gt; pii;
+const int MAX_N = 1e5 + 7;
+const int INF = 1e18;
+vector&lt;Node&gt; edge[MAX_N], new_edge[MAX_N], E[MAX_N];
+int dis[MAX_N], fitness[MAX_N], deg[MAX_N];
+bool vis[MAX_N];
+int T, n, m;
+int dfn[MAX_N], low[MAX_N], scc[MAX_N];
+bool in_st[MAX_N];
+int order, num;
+stack&lt;int&gt; st;
+
+void tarjan(int u) {
+    dfn[u] = low[u] = ++order;
+    st.push(u);
+    in_st[u] = true;
+    for (auto item : new_edge[u]) {
+        int v = item.v;
+        if (!dfn[v]) {
+            tarjan(v);
+            low[u] = min(low[u], low[v]);
+        } else if (in_st[v]) {
+            low[u] = min(low[u], dfn[v]);
+        }
+    }
+    if (dfn[u] == low[u]) {
+        int tmp;
+        num++;
+        do {
+            tmp = st.top(); 
+            st.pop();
+            scc[tmp] = num;
+            in_st[tmp] = false;
+        } while(tmp != u);
+    }
+}
+
+
+void dijkstra() {
+    priority_queue&lt;pii&gt; q;
+    for (int i = 0; i &lt;= n; ++i) dis[i] = INF, fitness[i] = 0, vis[i] = false, deg[i] = 0;
+    dis[1] = fitness[1] = 0;
+    q.push(make_pair(0, 1));
+    while (!q.empty()) {
+        pii p = q.top(); q.pop();
+        int u = p.second;
+        if (vis[u]) continue;
+        vis[u] = true;
+        for (auto item : edge[u]) {
+            int v = item.v, e = item.e;
+            if (dis[v] &gt; dis[u] + e) {
+                dis[v] = dis[u] + e;
+                q.push(make_pair(-dis[v], v));
+            }
+        }
+    }
+    for (int u = 1; u &lt;= n; ++u) {
+        for (auto item : edge[u]) {
+            int v = item.v, e = item.e, p = item.p;
+            if (dis[u] + e == dis[v]) {
+                new_edge[u].push_back({v, e, p});
+            }
+        }
+    }
+    for (int i = 0; i &lt;= n; ++i) dfn[i] = low[i] = scc[i] = 0, E[i].clear(), in_st[i] = false;
+    num = order = 0;
+    while (!st.empty()) st.pop();
+    for (int i = 1; i &lt;= n; ++i) {
+        if (!dfn[i]) tarjan(i);
+    }
+    for (int i = 1; i &lt;= n; ++i) {
+        for (auto item : new_edge[i]) {
+            int v = item.v, e = item.e, p = item.p;
+            if (scc[i] == scc[v]) continue;
+            E[scc[i]].push_back({scc[v], e, p});
+            ++deg[scc[v]];
+        }
+    }
+    queue&lt;int&gt; topo;
+    topo.push(scc[1]);
+    while (!topo.empty()) {
+        int u = topo.front(); topo.pop();
+        for (auto item : E[u]) {
+            int v = item.v, p = item.p;
+            fitness[v] = max(fitness[v], fitness[u] + p);
+            --deg[v];
+            if (!deg[v]) topo.push(v);
+        }
+    }
+}
+
+signed main() {
+    ios::sync_with_stdio(false);
+    cin &gt;&gt; T;
+    while (T--) {
+        cin &gt;&gt; n &gt;&gt; m;
+        for (int i = 0; i &lt; m; ++i) {
+            int u, v, e, p;
+            cin &gt;&gt; u &gt;&gt; v &gt;&gt; e &gt;&gt; p;
+            edge[u].push_back({v, e, p});
+        }
+        dijkstra();
+        cout &lt;&lt; dis[n] &lt;&lt; " " &lt;&lt; fitness[scc[n]] &lt;&lt; "\n";
+        for (int i = 1; i &lt;= n; ++i) edge[i].clear(), new_edge[i].clear();
+    }
+    return 0;
+}
+</pre></code>
+</body>
+</html>
