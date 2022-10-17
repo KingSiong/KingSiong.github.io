@@ -143,7 +143,7 @@ bool NNP_submit(string title) {
     }
     OUT << html;
     OUT.close();
-    cmd = "python add_record.py " + title + " " + source;
+    cmd = "python3 add_record.py " + title + " " + source;
     if (!NNP_run_cmd(cmd)) {
         NNP_error("failed to run add_record.py.");
         return false;
