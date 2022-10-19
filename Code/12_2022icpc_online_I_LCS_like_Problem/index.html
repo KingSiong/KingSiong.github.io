@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../default.min.css">
+        <script src="../highlight.min.js"></script>
+        <script src="../highlightjs-line-numbers.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+            hljs.initLineNumbersOnLoad();
+        </script>
+        <style>
+            .hljs-ln-numbers {
+                text-align: center;
+                color: #ccc;
+                border-right: 1px solid #999;
+                vertical-align: top;
+                padding-right: 5px;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
+        <title>NNP's Repo</title>
+    </head>
+<body>
+<pre><code>#include &lt;bits/stdc++.h&gt;
+
+using namespace std;
+
+const int MAX_N = 5e5 + 7;
+const int MAX_SIGMA = 27;
+char s[MAX_N], t[MAX_N];
+int dp[MAX_SIGMA], e[MAX_SIGMA][MAX_SIGMA];
+bool vis[MAX_SIGMA];
+int n, m;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin &gt;&gt; s &gt;&gt; t;
+    n = strlen(s);
+    m = strlen(t);
+    for (int i = 0; i &lt; m; ++i) {
+        for (int j = 0; j &lt; 26; ++j) {
+            if (vis[j]) {
+                e[(int)(t[i] - 'a')][j] = true;
+            }
+        }
+        vis[(int)(t[i] - 'a')] = true;
+    }
+    int len = 0;
+    for (int i = 0; i &lt; n; ++i) {
+        int ch = (int)(s[i] - 'a');
+        if (!vis[ch]) {
+            ++len;
+            continue;
+        }
+        if (!e[ch][ch]) dp[ch] = max(dp[ch], dp[ch] + 1);
+        for (int j = 0; j &lt; 26; ++j) {
+            if (j == ch) continue;
+            if (!e[ch][j]) {
+            #ifdef debug
+                cout &lt;&lt; (char)(ch + 'a') &lt;&lt; "-&gt;" &lt;&lt; (char)(j + 'a') &lt;&lt; endl;
+            #endif
+                dp[ch] = max(dp[ch], dp[j] + 1);
+            }
+        }
+    #ifdef debug
+        cout &lt;&lt; i &lt;&lt; " " &lt;&lt; dp[ch] &lt;&lt; endl;
+    #endif
+    }
+    int ans = 0;
+    for (int i = 0; i &lt; 26; ++i) {
+        ans = max(ans, dp[i]);
+    }
+    cout &lt;&lt; ans + len &lt;&lt; "\n";
+    return 0;
+}
+</pre></code>
+</body>
+</html>
