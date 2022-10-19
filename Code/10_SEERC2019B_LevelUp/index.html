@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="../default.min.css">
+        <script src="../highlight.min.js"></script>
+        <script src="../highlightjs-line-numbers.min.js"></script>
+        <script>
+            hljs.initHighlightingOnLoad();
+            hljs.initLineNumbersOnLoad();
+        </script>
+        <style>
+            .hljs-ln-numbers {
+                text-align: center;
+                color: #ccc;
+                border-right: 1px solid #999;
+                vertical-align: top;
+                padding-right: 5px;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
+        <title>NNP's Repo</title>
+    </head>
+<body>
+<pre><code>#include &lt;bits/stdc++.h&gt;
+#define int long long
+#define debug
+
+using namespace std;
+
+struct Node {
+    int x, t, y, r;
+    bool operator &lt; (const Node &u) {
+        return x &lt; u.x;
+    }
+};
+
+const int INF = 1e18 + 7;
+const int MAX_N = 5e2 + 7;
+int dp[MAX_N &lt;&lt; 1][MAX_N &lt;&lt; 1];
+Node a[MAX_N];
+int n, s1, s2;
+
+signed main() {
+    ios::sync_with_stdio(false);
+    cin &gt;&gt; n &gt;&gt; s1 &gt;&gt; s2;
+    for (int i = 1; i &lt;= n; ++i) {
+        cin &gt;&gt; a[i].x &gt;&gt; a[i].t
+            &gt;&gt; a[i].y &gt;&gt; a[i].r;
+    }
+    sort(a + 1, a + n + 1);
+    int M = 1000;
+    for (int i = 0; i &lt;= M; ++i) {
+        for (int j = 0; j &lt;= M; ++j) {
+            dp[i][j] = INF;
+        }
+    }
+    dp[0][0] = 0;
+    for (int i = 1; i &lt;= n; ++i) {
+        for (int j = M; j &gt;= 0; --j) {
+            for (int k = M; k &gt;= 0; --k) {
+                if (j &gt;= a[i].x && j - a[i].x &lt; s1) {
+                    dp[j][k] = min(dp[j][k], dp[j - a[i].x][k] + a[i].t);
+                }
+                if (k &gt;= a[i].y) {
+                    dp[j][k] = min(dp[j][k], dp[j][k - a[i].y] + a[i].r);
+                }
+            }
+        }
+    }
+    int ans = INF;
+    for (int i = s1; i &lt;= M; ++i) {
+        for (int j = max(0ll, s2 - i + s1); j &lt;= M; ++j) {
+            ans = min(ans, dp[i][j]);
+        }
+    }
+    if (ans &lt; INF) {
+        cout &lt;&lt; ans &lt;&lt; "\n";
+    } else {
+        cout &lt;&lt; "-1\n";
+    }
+    return 0;
+}
+</pre></code>
+</body>
+</html>

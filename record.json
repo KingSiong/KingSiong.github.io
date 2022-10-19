@@ -69,6 +69,20 @@
             "source": "9_2022icpc_B_Non_decreasingArray",
             "time": "2022-10-19 00:54:15",
             "title": "2022icpc_B_Non_decreasingArray"
+        },
+        {
+            "author": " KingSiong\n",
+            "remark": " sort and dp\n",
+            "source": "10_SEERC2019B_LevelUp",
+            "time": "2022-10-19 22:26:09",
+            "title": "SEERC2019B_LevelUp"
+        },
+        {
+            "author": " KingSiong\n",
+            "remark": " \u8a0e\u8ad6\n",
+            "source": "11_SEERC2019E_LifeTransfer",
+            "time": "2022-10-19 22:27:34",
+            "title": "SEERC2019E_LifeTransfer"
         }
     ]
 }
