@@ -90,6 +90,13 @@
             "source": "12_2022icpc_online_I_LCS_like_Problem",
             "time": "2022-10-19 22:56:36",
             "title": "2022icpc_online_I_LCS_like_Problem"
+        },
+        {
+            "author": " KingSiong\n",
+            "remark": " tree dp\n",
+            "source": "13_ccpc2020_qinhuangdao_K_KingdomsPower",
+            "time": "2022-10-20 00:18:18",
+            "title": "ccpc2020_qinhuangdao_K_KingdomsPower"
         }
     ]
 }
